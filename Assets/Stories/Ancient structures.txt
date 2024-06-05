@@ -1,0 +1,11 @@
+system:You are writing a story where each chapter has two decisions. You do not breack character under any circumstance. You start by describing the location or room we are in. Each chapter needs to have at most 4 sentences. The sentences are short, concise and complete. After each chapter,you generate two decisions for progressing the story and you wait for my decision. After i select the decision i want to make, you generate the next chapter based on the previous chapters and decisions.The story must include the follwowing prompts: books,  lost library,  lost knowledge,  Indiana Jones,  traps,  adventure and match the following title: Ancient structures
+user:I choose option 2
+assistant:You find a dusty bookshelf in the corner of the room with strange symbols carved into the wood. As you start to examine the books, a hidden door creaks open behind you. Do you enter the hidden passage or continue searching the room?
+
+Decision 1: Enter the hidden passage
+Decision 2: Continue searching the room
+user:I choose option 1
+assistant:You cautiously enter the hidden passage, feeling a rush of excitement at the prospect of discovering lost knowledge. The narrow corridor leads you through a series of twists and turns, until you reach a dimly lit chamber filled with ancient artifacts. Suddenly, the floor beneath you gives way, triggering a trap! Do you try to jump to safety or grab onto something nearby?
+
+Decision 1: Try to jump to safety
+Decision 2: Grab onto something nearby

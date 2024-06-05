@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
@@ -14,8 +13,6 @@ public class AI : MonoBehaviour
 {
     private OpenAIAPI api;
     private List<ChatMessage> messages;
-    private List<ChatMessage> option1List;
-    private List<ChatMessage> option2List;
 
     public GameObject menuCanvas;
     public Button btnStartNewStory;
@@ -26,10 +23,12 @@ public class AI : MonoBehaviour
     public TMP_Text story;
     public Button option1;
     public Button option2;
-    public Button btnMainMenu; // TODO
-    public Button btnRereadStory; //TODO
+    public Button btnMainMenu;
+    public Button btnRereadStory;
 
     public GameObject rereadCanvas;
+    public Button btnReturnToMain;
+    public TMP_Text rereadStoryText;
 
     public GameObject newStoryCanvas;
     public TMP_InputField inputPrompts;
@@ -38,25 +37,22 @@ public class AI : MonoBehaviour
     public Button nsBtnCancel;
 
     public GameObject continueStoryCanvas;
-    public ScrollRect scrollOldStories;
+    public TMP_Dropdown dropdownOldStories;
     public Button csBtnOK;
     public Button csBtnCancel;
 
+    private string selectedTitle;
+
+    private const string storyPath = "Assets\\Stories";
+    
     void Start()
     {
-        /*api = new OpenAIAPI("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");
-
-        ChatMessage response1 = new ChatMessage(ChatMessageRole.User, "I choose option 1");
-        ChatMessage response2 = new ChatMessage(ChatMessageRole.User, "I choose option 2");
-
-        startConversation();
-        option1.onClick.AddListener(() => getResponse(response1));
-        option2.onClick.AddListener(() => getResponse(response2));*/
 
         menuCanvas.SetActive(true);
         mainCanvas.SetActive(false);
         newStoryCanvas.SetActive(false);
         continueStoryCanvas.SetActive(false);
+        rereadCanvas.SetActive(false);
 
 
         //menu canvas
@@ -68,6 +64,7 @@ public class AI : MonoBehaviour
         {
             menuCanvas.SetActive(false);
             continueStoryCanvas.SetActive(true);
+            loadOldStories();
         });
         btnExit.onClick.AddListener(() =>
         {
@@ -85,6 +82,9 @@ public class AI : MonoBehaviour
             List<String> prompts = new List<string>(inputPrompts.text.Split(','));
 
             startGame(title, prompts);
+
+            //TODO - make the rereadCanvas display the old chapters and decisions
+            rereadStoryText.text = messages.ToString();
        
         });
 
@@ -94,13 +94,33 @@ public class AI : MonoBehaviour
             menuCanvas.SetActive(true);
         });
 
+        btnMainMenu.onClick.AddListener(() =>
+        {
+            mainCanvas.SetActive(false);
+            menuCanvas.SetActive(true);
+        });
+
+        btnRereadStory.onClick.AddListener(() =>
+        {
+            rereadCanvas.SetActive(true);
+            mainCanvas.SetActive(false);
+        });
+
 
         //continue story canvas
         csBtnOK.onClick.AddListener(() =>
         {
             continueStoryCanvas.SetActive(false);
+
+            List<ChatMessage> oldMessages = loadFromFile(selectedTitle);
+
             mainCanvas.SetActive(true);
-            //startGame();
+            // Load the story to continue from where it left off
+            restartGame(selectedTitle, oldMessages);
+
+
+
+
         });
 
         csBtnCancel.onClick.AddListener(() =>
@@ -108,40 +128,18 @@ public class AI : MonoBehaviour
             continueStoryCanvas.SetActive(false);
             menuCanvas.SetActive(true);
         });
-    }
 
-    private void startConversation(List<string> prompts, String title)
-    {
-
-        messages = new List<ChatMessage>
+        //reread canvas
+        btnReturnToMain.onClick.AddListener(() =>
         {
-            new ChatMessage(ChatMessageRole.System, "You are writing a story where each chapter has two decisions. " +
-           "You do not breack character under any circumstance. You start by describing the location or room we are in. " +
-           "Each chapter needs to have at most 4 sentences. The sentences are short, concise and complete. " +
-           "After each chapter,you generate two decisions for progressing the story and you wait for my decision. " +
-           "After i select the decision i want to make, you generate the next chapter based on the previous chapters and decisions." +
-           "The story must include the follwowing prompts: " + string.Join(", ", prompts) + " and match the following title: " + title)
-        };
+            rereadCanvas.SetActive(false);
+            menuCanvas.SetActive(false);
+            mainCanvas.SetActive(true);
+        });
 
-        story.text = "Click any button to start.";
 
     }
 
-    private void getOption1()
-    {
-        option1List = new List<ChatMessage>
-        {
-            new ChatMessage(ChatMessageRole.System, "Based on what is written above, write the first choice.")
-        };
-    }
-
-    private void getOption2()
-    {
-        option2List = new List<ChatMessage>
-        {
-            new ChatMessage(ChatMessageRole.System, "Based on what is written above, write the second choice.")
-        };
-    }
     /*
     //private async void getResponse()
     //{
@@ -177,7 +175,25 @@ public class AI : MonoBehaviour
     //option2.GetComponentInChildren<TextMeshProUGUI>().text = choice2Text;
 
     //}
+
     */
+
+    private void startConversation(List<string> prompts, String title)
+    {
+
+        messages = new List<ChatMessage>
+        {
+            new ChatMessage(ChatMessageRole.System, "You are writing a story where each chapter has two decisions. " +
+           "You do not breack character under any circumstance. You start by describing the location or room we are in. " +
+           "Each chapter needs to have at most 4 sentences. The sentences are short, concise and complete. " +
+           "After each chapter,you generate two decisions for progressing the story and you wait for my decision. " +
+           "After i select the decision i want to make, you generate the next chapter based on the previous chapters and decisions." +
+           "The story must include the follwowing prompts: " + string.Join(", ", prompts) + " and match the following title: " + title)
+        };
+
+        story.text = "Click any button to start.";
+
+    }
 
     private async void getResponse(ChatMessage optionChoice, String title)
     {
@@ -191,7 +207,7 @@ public class AI : MonoBehaviour
         {
             Model = Model.ChatGPTTurbo,
             Temperature = 0.9,
-            MaxTokens = 100,
+            MaxTokens = 150,
             Messages = messages
         });
 
@@ -203,7 +219,7 @@ public class AI : MonoBehaviour
         story.text = responseMessage.TextContent;
 
         //Saving to file
-        //saveToFile(title, messages);
+        saveToFile(title, messages);
 
         // Reactivating the buttons
         option1.interactable = true;
@@ -215,68 +231,52 @@ public class AI : MonoBehaviour
     {
         api = new OpenAIAPI("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");
 
-
         ChatMessage response1 = new ChatMessage(ChatMessageRole.User, "I choose option 1");
         ChatMessage response2 = new ChatMessage(ChatMessageRole.User, "I choose option 2");
+
+        //ensuring there are no duplicate listeners
+        option1.onClick.RemoveAllListeners();
+        option2.onClick.RemoveAllListeners();
 
         startConversation(prompts, title);
         option1.onClick.AddListener(() => getResponse(response1, title));
         option2.onClick.AddListener(() => getResponse(response2, title));
     }
 
-    /*
-    private void startNewStory()
+    private void restartConversation(List<ChatMessage> oldMessasges)
     {
-        menuCanvas.SetActive(false);
-        newStoryCanvas.SetActive(true);
+
+        messages = oldMessasges;
+        messages.Add(new ChatMessage(ChatMessageRole.User, "Based on the previous messages, continue the story."));
+
+        story.text = "Click any button to start.";
+
     }
 
-    private void continueStory()
+    private void restartGame(String title, List<ChatMessage> oldMessages)
     {
-        menuCanvas.SetActive(false);
-        continueStoryCanvas.SetActive(true);
-    }
+        api = new OpenAIAPI("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");
 
-    private void exit()
-    {
-        Application.Quit();
-    }
+        ChatMessage response1 = new ChatMessage(ChatMessageRole.User, "I choose option 1");
+        ChatMessage response2 = new ChatMessage(ChatMessageRole.User, "I choose option 2");
 
-    private void nsOK()
-    {
-        newStoryCanvas.SetActive(false);
-        mainCanvas.SetActive(true);
-        string title=inputTitle.ToString();
-        startGame();
-    }
+        //ensuring there are no duplicate listeners
+        option1.onClick.RemoveAllListeners();
+        option2.onClick.RemoveAllListeners();
 
-    private void nsCancel()
-    {
-        newStoryCanvas.SetActive(false);
-        menuCanvas.SetActive(true);
+        restartConversation(oldMessages);
+        option1.onClick.AddListener(() => getResponse(response1, title));
+        option2.onClick.AddListener(() => getResponse(response2, title));
     }
-
-    private void csOK()
-    {
-        continueStoryCanvas.SetActive(false);
-        mainCanvas.SetActive(true);
-        startGame();
-    }
-
-    private void csCancel()
-    {
-        continueStoryCanvas.SetActive(false);
-        menuCanvas.SetActive(true);
-    }
-    */
 
     private void saveToFile(string fileName, List<ChatMessage> messageList)
     {
-        using (StreamWriter writer = new StreamWriter(fileName))
+        string filePath = Path.Combine(storyPath, fileName + ".txt");
+        using (StreamWriter writer = new StreamWriter(filePath))
         {
             foreach (var message in messageList)
             {
-                writer.WriteLine($"{message.Role}|{message.TextContent}");
+                writer.WriteLine($"{message.Role}:{message.TextContent}");
             }
         }
     }
@@ -285,23 +285,94 @@ public class AI : MonoBehaviour
     {
         List<ChatMessage> messageList = new List<ChatMessage>();
 
-        using (StreamReader reader = new StreamReader(fileName))
+        string filePath = Path.Combine(storyPath, fileName + ".txt");
+
+        // Check if the file exists
+        if (File.Exists(filePath))
         {
-            string line;
-            while ((line = reader.ReadLine()) != null)
+            using (StreamReader reader = new StreamReader(filePath))
             {
-                string[] parts = line.Split('|');
-                if (parts.Length == 2)
+                string line;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    ChatMessageRole role = (ChatMessageRole)Enum.Parse(typeof(ChatMessageRole), parts[0]);
-                    string content = parts[1];
-                    messageList.Add(new ChatMessage(role, content));
+                    string[] splitLine = line.Split(':');
+                    if (splitLine.Length == 2)
+                    {
+                        ChatMessageRole role = (ChatMessageRole)Enum.Parse(typeof(ChatMessageRole), splitLine[0]);
+                        string content = splitLine[1];
+                        messageList.Add(new ChatMessage(role, content));
+                    }
                 }
             }
+        }
+        else
+        {
+            Debug.LogError("File not found: " + filePath);
         }
 
         return messageList;
     }
+    /*
+    private void loadOldStories()
+    {
+        // Clear existing options in the Dropdown
+        dropdownOldStories.ClearOptions();
+
+        // Get the list of story files from the save directory
+        string[] storyFiles = Directory.GetFiles(storyPath, "*.txt");
+
+        List<string> options = new List<string>();
+
+        // Create an option for each story file
+        foreach (string storyFile in storyFiles)
+        {
+            // Extract the title from the file name (without extension)
+            string title = Path.GetFileNameWithoutExtension(storyFile);
+
+            // Add the title to the options list
+            options.Add(title);
+        }
+
+        // Set the options for the Dropdown
+        dropdownOldStories.AddOptions(options);
+
+        // Add a listener to the Dropdown to handle selection
+        dropdownOldStories.onValueChanged.AddListener(delegate
+        {
+            SelectStory(dropdownOldStories.options[dropdownOldStories.value].text);
+        });
+    }
+    */
+
+    private void loadOldStories()
+    {
+        // Clear existing options in the Dropdown
+        dropdownOldStories.ClearOptions();
+
+        // Get the list of story files from the save directory
+        string[] storyFiles = Directory.GetFiles(storyPath, "*.txt");
+
+        List<string> options = new List<string>();
+
+        // Create an option for each story file
+        foreach (string storyFile in storyFiles)
+        {
+            // Extract the title from the file name (without extension)
+            string title = Path.GetFileNameWithoutExtension(storyFile);
+
+            // Add the title to the options list
+            options.Add(title);
+        }
+
+        // Set the options for the Dropdown
+        dropdownOldStories.AddOptions(options);
+
+    }
+
+
+    private void SelectStory(string title)
+    {
+        selectedTitle = title;
+    }
+
 }
-
-

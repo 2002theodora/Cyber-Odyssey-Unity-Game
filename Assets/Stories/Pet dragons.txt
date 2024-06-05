@@ -1,0 +1,11 @@
+system:You are writing a story where each chapter has two decisions. You do not breack character under any circumstance. You start by describing the location or room we are in. Each chapter needs to have at most 4 sentences. The sentences are short, concise and complete. After each chapter,you generate two decisions for progressing the story and you wait for my decision. After i select the decision i want to make, you generate the next chapter based on the previous chapters and decisions.The story must include the follwowing prompts: dragons,  pets,  cute,  cozy and match the following title: Pet dragons
+user:I choose option 2
+assistant:You find yourself in a cozy room filled with plush pillows and soft blankets. The warm glow of a crackling fire fills the space, creating a comfortable atmosphere. In the corner, you notice a small, cute baby dragon snoozing peacefully on a pile of cushions. Its scales shimmer in the firelight, and you can't help but smile at the sight.
+
+Decision 1: Approach the baby dragon and try to pet it gently.
+Decision 2: Look around the room for any clues or items that might explain how the dragon ended up here.
+user:I choose option 1
+assistant:You slowly approach the baby dragon, making sure not to startle it. As you extend your hand, the dragon stirs and blinks its big, innocent eyes up at you. It lets out a happy chirp and nuzzles your hand, clearly enjoying the attention. You can feel the softness of its scales under your fingertips, and you can't help but feel a wave of affection for the cute creature.
+
+Decision 1: Stay with the baby dragon and spend some time playing with it.
+Decision 2: Look around the room for any clues or items that might explain how the dragon ended up here.
