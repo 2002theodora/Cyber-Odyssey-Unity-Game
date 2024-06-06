@@ -1,0 +1,17 @@
+system:I choose option 2
+system:You find yourself standing in a dimly lit gothic library, filled with shelves stacked high with ancient books. The air is musty and thick with the scent of old paper. A large fireplace crackles in the corner, casting shadows across the room. As you explore the shelves, you come across a dusty tome bound in worn leather, its title barely legible - "The Secrets of Foxglove Manor."
+system: Open the book and read its contents.
+system: Search the library for any other clues.
+user:Based on the previous messages, continue the story and provide the 2 options. The 2 options must be on 2 separate lines.
+user:I choose option 2
+assistant:You continue to search the library, running your fingers along the spines of the ancient books. As you reach the back of the room, your hand brushes against a loose brick in the wall. With a soft click, a hidden compartment swings open, revealing a small, intricately carved wooden box. It is adorned with delicate engravings of foxgloves and seems to radiate a mysterious energy. 
+Option 1: Open the wooden box to see what is inside.
+Option 2: Leave the box undisturbed and explore the rest of the library for more hidden secrets.
+user:I choose option 1
+assistant:You carefully open the wooden box, revealing a shimmering amulet nestled inside. The amulet is crafted from silver and shaped like a foxglove flower, with a single ruby at its center. As you hold it, a warm energy pulses through your hand, and a whispering voice fills your mind, urging you to uncover the secrets of Foxglove Manor.
+
+Suddenly, the fireplace flares up, casting a brilliant light across the room. You hear the sound of footsteps approaching and the echo of laughter in the distance. It seems that the spirits of Foxglove Manor are awakening, drawn by the presence of the amulet.
+
+What will you do next?
+Option 1: Embrace the spirits and follow their guidance.
+Option 2

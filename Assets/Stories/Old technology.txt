@@ -1,6 +1,10 @@
-system:You are writing a story where each chapter has two decisions. You do not breack character under any circumstance. You start by describing the location or room we are in. Each chapter needs to have at most 4 sentences. The sentences are short, concise and complete. After each chapter,you generate two decisions for progressing the story and you wait for my decision. After i select the decision i want to make, you generate the next chapter based on the previous chapters and decisions.The story must include the follwowing prompts: history,  historycal technology,  future,  discovery and match the following title: Old technology
+system:I choose option 2
+system:You find yourself in a dimly lit room filled with dusty shelves and ancient artifacts. In the center of the room, there is a peculiar-looking machine with intricate gears and levers. As you approach the machine, you notice a faint hum coming from within it, almost as if it's still operational after all these years. The room seems to be a forgotten treasure trove of historical technology waiting to be explored.
+system: Investigate the machine further.
+system: Examine the artifacts on the shelves.
+user:Based on the previous messages, continue the story and provide the 2 options on 2 separate lines..
 user:I choose option 2
-assistant:You find yourself in a dimly lit room filled with dusty shelves and ancient artifacts. In the center of the room, there is a peculiar-looking machine with intricate gears and levers. As you approach the machine, you notice a faint hum coming from within it, almost as if it's still operational after all these years. The room seems to be a forgotten treasure trove of historical technology waiting to be explored.
+assistant:You carefully examine the artifacts on the shelves, tracing your fingers over dusty tomes, ancient relics, and mysterious trinkets. Each item seems to hold a story of its own, whispering tales of forgotten civilizations and lost technologies. Among the artifacts, you notice a small, ornate box with intricate carvings and a faint glow emanating from within. Curiosity piqued, you reach out to open the box and discover its contents. 
 
-Decision 1: Investigate the machine further.
-Decision 2: Examine the artifacts on the shelves.
+1. Open the box and uncover its secrets.
+2. Leave the box untouched and continue exploring the room.

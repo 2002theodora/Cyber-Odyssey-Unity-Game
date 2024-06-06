@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
@@ -5,9 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using OpenAI_API;
 using OpenAI_API.Chat;
-using System;
 using OpenAI_API.Models;
-using Unity.VisualScripting;
+
+
 
 public class AI : MonoBehaviour
 {
@@ -26,10 +27,6 @@ public class AI : MonoBehaviour
     public Button btnMainMenu;
     public Button btnRereadStory;
 
-    public GameObject rereadCanvas;
-    public Button btnReturnToMain;
-    public TMP_Text rereadStoryText;
-
     public GameObject newStoryCanvas;
     public TMP_InputField inputPrompts;
     public TMP_InputField inputTitle;
@@ -41,31 +38,28 @@ public class AI : MonoBehaviour
     public Button csBtnOK;
     public Button csBtnCancel;
 
-    private string selectedTitle;
-
     private const string storyPath = "Assets\\Stories";
     
     void Start()
     {
-
-        menuCanvas.SetActive(true);
         mainCanvas.SetActive(false);
         newStoryCanvas.SetActive(false);
         continueStoryCanvas.SetActive(false);
-        rereadCanvas.SetActive(false);
-
+        menuCanvas.SetActive(true);
 
         //menu canvas
         btnStartNewStory.onClick.AddListener(() => {
             menuCanvas.SetActive(false);
             newStoryCanvas.SetActive(true);
         });
+
         btnContinueStory.onClick.AddListener(() =>
         {
             menuCanvas.SetActive(false);
             continueStoryCanvas.SetActive(true);
             loadOldStories();
         });
+
         btnExit.onClick.AddListener(() =>
         {
             Application.Quit();
@@ -82,9 +76,6 @@ public class AI : MonoBehaviour
             List<String> prompts = new List<string>(inputPrompts.text.Split(','));
 
             startGame(title, prompts);
-
-            //TODO - make the rereadCanvas display the old chapters and decisions
-            rereadStoryText.text = messages.ToString();
        
         });
 
@@ -100,26 +91,18 @@ public class AI : MonoBehaviour
             menuCanvas.SetActive(true);
         });
 
-        btnRereadStory.onClick.AddListener(() =>
-        {
-            rereadCanvas.SetActive(true);
-            mainCanvas.SetActive(false);
-        });
-
 
         //continue story canvas
         csBtnOK.onClick.AddListener(() =>
         {
             continueStoryCanvas.SetActive(false);
 
+            string selectedTitle = dropdownOldStories.options[dropdownOldStories.value].text;
             List<ChatMessage> oldMessages = loadFromFile(selectedTitle);
 
             mainCanvas.SetActive(true);
             // Load the story to continue from where it left off
             restartGame(selectedTitle, oldMessages);
-
-
-
 
         });
 
@@ -129,15 +112,11 @@ public class AI : MonoBehaviour
             menuCanvas.SetActive(true);
         });
 
-        //reread canvas
-        btnReturnToMain.onClick.AddListener(() =>
-        {
-            rereadCanvas.SetActive(false);
-            menuCanvas.SetActive(false);
-            mainCanvas.SetActive(true);
+        //main canvas
+        btnMainMenu.onClick.AddListener(() => {
+            mainCanvas.SetActive(false);
+            menuCanvas.SetActive(true);
         });
-
-
     }
 
     /*
@@ -206,7 +185,7 @@ public class AI : MonoBehaviour
         var chatResult = await api.Chat.CreateChatCompletionAsync(new ChatRequest()
         {
             Model = Model.ChatGPTTurbo,
-            Temperature = 0.9,
+            Temperature = 1.1,
             MaxTokens = 150,
             Messages = messages
         });
@@ -247,7 +226,8 @@ public class AI : MonoBehaviour
     {
 
         messages = oldMessasges;
-        messages.Add(new ChatMessage(ChatMessageRole.User, "Based on the previous messages, continue the story."));
+        messages.Add(new ChatMessage(ChatMessageRole.User, "Based on the previous messages, continue the story " +
+            "and provide the 2 options. The 2 options must be on 2 separate lines."));
 
         story.text = "Click any button to start.";
 
@@ -298,9 +278,9 @@ public class AI : MonoBehaviour
                     string[] splitLine = line.Split(':');
                     if (splitLine.Length == 2)
                     {
-                        ChatMessageRole role = (ChatMessageRole)Enum.Parse(typeof(ChatMessageRole), splitLine[0]);
+                        //ChatMessageRole role;
                         string content = splitLine[1];
-                        messageList.Add(new ChatMessage(role, content));
+                        messageList.Add(new ChatMessage(ChatMessageRole.System, content));
                     }
                 }
             }
@@ -312,37 +292,6 @@ public class AI : MonoBehaviour
 
         return messageList;
     }
-    /*
-    private void loadOldStories()
-    {
-        // Clear existing options in the Dropdown
-        dropdownOldStories.ClearOptions();
-
-        // Get the list of story files from the save directory
-        string[] storyFiles = Directory.GetFiles(storyPath, "*.txt");
-
-        List<string> options = new List<string>();
-
-        // Create an option for each story file
-        foreach (string storyFile in storyFiles)
-        {
-            // Extract the title from the file name (without extension)
-            string title = Path.GetFileNameWithoutExtension(storyFile);
-
-            // Add the title to the options list
-            options.Add(title);
-        }
-
-        // Set the options for the Dropdown
-        dropdownOldStories.AddOptions(options);
-
-        // Add a listener to the Dropdown to handle selection
-        dropdownOldStories.onValueChanged.AddListener(delegate
-        {
-            SelectStory(dropdownOldStories.options[dropdownOldStories.value].text);
-        });
-    }
-    */
 
     private void loadOldStories()
     {
@@ -368,11 +317,4 @@ public class AI : MonoBehaviour
         dropdownOldStories.AddOptions(options);
 
     }
-
-
-    private void SelectStory(string title)
-    {
-        selectedTitle = title;
-    }
-
 }

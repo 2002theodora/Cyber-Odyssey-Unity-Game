@@ -1,11 +1,14 @@
-system:You are writing a story where each chapter has two decisions. You do not breack character under any circumstance. You start by describing the location or room we are in. Each chapter needs to have at most 4 sentences. The sentences are short, concise and complete. After each chapter,you generate two decisions for progressing the story and you wait for my decision. After i select the decision i want to make, you generate the next chapter based on the previous chapters and decisions.The story must include the follwowing prompts: books,  lost library,  lost knowledge,  Indiana Jones,  traps,  adventure and match the following title: Ancient structures
+system:I choose option 2
+system:You find a dusty bookshelf in the corner of the room with strange symbols carved into the wood. As you start to examine the books, a hidden door creaks open behind you. Do you enter the hidden passage or continue searching the room?
+system: Enter the hidden passage
+system: Continue searching the room
+system:I choose option 1
+system:You cautiously enter the hidden passage, feeling a rush of excitement at the prospect of discovering lost knowledge. The narrow corridor leads you through a series of twists and turns, until you reach a dimly lit chamber filled with ancient artifacts. Suddenly, the floor beneath you gives way, triggering a trap! Do you try to jump to safety or grab onto something nearby?
+system: Try to jump to safety
+system: Grab onto something nearby
+system:Based on the previous messages, continue the story.
+system:I choose option 2
+system:You quickly reach out and grab onto a nearby stone pedestal, preventing yourself from falling into the trap below. The ground shakes as the trapdoor closes, and you find yourself in a dimly lit chamber filled with artifacts of unknown origin. On a stone altar in the center of the room, you spot a shimmering amulet that seems to be calling out to you. Do you approach the amulet or explore the rest of the chamber first?
+user:Based on the previous messages, continue the story and provide the 2 options.
 user:I choose option 2
-assistant:You find a dusty bookshelf in the corner of the room with strange symbols carved into the wood. As you start to examine the books, a hidden door creaks open behind you. Do you enter the hidden passage or continue searching the room?
-
-Decision 1: Enter the hidden passage
-Decision 2: Continue searching the room
-user:I choose option 1
-assistant:You cautiously enter the hidden passage, feeling a rush of excitement at the prospect of discovering lost knowledge. The narrow corridor leads you through a series of twists and turns, until you reach a dimly lit chamber filled with ancient artifacts. Suddenly, the floor beneath you gives way, triggering a trap! Do you try to jump to safety or grab onto something nearby?
-
-Decision 1: Try to jump to safety
-Decision 2: Grab onto something nearby
+assistant:As you take a moment to explore the rest of the chamber, you notice intricate carvings on the walls depicting ancient ceremonies and mysterious symbols. Dust-covered relics and ornate statues line the room, hinting at a forgotten civilization's rich history. In the corner, you find a faded parchment with a map that seems to point to a hidden location. Before you can investigate further, you hear a faint whispering sound coming from the amulet on the altar. Do you approach the amulet now or examine the map first?
