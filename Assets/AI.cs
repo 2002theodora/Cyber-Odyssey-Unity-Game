@@ -119,44 +119,6 @@ public class AI : MonoBehaviour
         });
     }
 
-    /*
-    //private async void getResponse()
-    //{
-
-    //// Create chat messages for the choices provided by the chatbot
-    //ChatMessage choice1 = new ChatMessage(ChatMessageRole.System, "Based on the chapter you wrote, generate the first decision.");
-
-    //ChatMessage choice2 = new ChatMessage(ChatMessageRole.System, "Based on the chapter you wrote, generate the second decision");
-
-    //// Add the choice messages to the messages list
-    //messages.Add(choice1);
-    //messages.Add(choice2);
-
-    //var chatResult = await api.Chat.CreateChatCompletionAsync(new ChatRequest()
-    //{
-    //    Model = Model.ChatGPTTurbo,
-    //    Temperature = 0.9,
-    //    MaxTokens = 100,
-    //    Messages = messages
-    //});
-
-    //// Extract the story text from the chatbot's response
-    //string storyText = chatResult.Choices[0].Message.TextContent;
-
-    //// Display the story text in the text box
-    //story.text = storyText;
-
-    //string choice1Text = chatResult.Choices[1].Message.TextContent;
-    //string choice2Text = chatResult.Choices[2].Message.TextContent;
-
-    //// Display the choices on the buttons
-    //option1.GetComponentInChildren<TextMeshProUGUI>().text = choice1Text;
-    //option2.GetComponentInChildren<TextMeshProUGUI>().text = choice2Text;
-
-    //}
-
-    */
-
     private void startConversation(List<string> prompts, String title)
     {
 
@@ -208,7 +170,7 @@ public class AI : MonoBehaviour
 
     private void startGame(String title, List<String> prompts)
     {
-        api = new OpenAIAPI("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");
+        api = new OpenAIAPI("Your API key here");
 
         ChatMessage response1 = new ChatMessage(ChatMessageRole.User, "I choose option 1");
         ChatMessage response2 = new ChatMessage(ChatMessageRole.User, "I choose option 2");
@@ -235,7 +197,7 @@ public class AI : MonoBehaviour
 
     private void restartGame(String title, List<ChatMessage> oldMessages)
     {
-        api = new OpenAIAPI("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");
+        api = new OpenAIAPI("Your API key here");
 
         ChatMessage response1 = new ChatMessage(ChatMessageRole.User, "I choose option 1");
         ChatMessage response2 = new ChatMessage(ChatMessageRole.User, "I choose option 2");
